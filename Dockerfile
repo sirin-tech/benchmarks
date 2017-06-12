@@ -34,8 +34,11 @@ ENV LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64\ ${LD_LIBRARY_PATH:+:${LD_LIBRARY_
 RUN pip install --upgrade https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.1.0-cp27-none-linux_x86_64.whl
 
 # Caffe2 installation
-# && cd caffe2
 RUN git clone --recursive https://github.com/caffe2/caffe2.git
 WORKDIR /distrs/caffe2
 RUN make && cd build && make install
 RUN python -c 'from caffe2.python import core' 2>/dev/null && echo "Success" || echo "Failure"
+
+# Cleanup
+WORKDIR /
+RUN rm -rf /distrs
