@@ -92,7 +92,7 @@ train_model = cnn.CNNModelHelper(order="NCHW", name="vgg_train")
 
 data, label = AddInput(
     train_model, batch_size=10,
-    db= './train',
+    db= '/caffe/train',
     db_type='lmdb')
 softmax = AddLeNetModel(train_model, data)
 
