@@ -79,4 +79,7 @@ RUN make install
 COPY ./benchmark/caffe /caffe
 COPY ./benchmark/tensorflow /tensorflow
 
+# Copying bash script
+COPY ./benchmark.sh /benchmark.sh
+
 WORKDIR /
