@@ -1,4 +1,3 @@
-# FROM nvidia/cuda:8.0-cudnn6-runtime
 FROM nvidia/cuda:8.0-cudnn5-devel-ubuntu16.04
 
 COPY ./keyboard /etc/default/keyboard
