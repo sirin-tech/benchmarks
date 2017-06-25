@@ -12,7 +12,6 @@ RUN ln -s /usr/lib/nvidia-375/libEGL.so.375.39 /usr/lib/nvidia-375/libEGL.so.1
 RUN ln -s /usr/lib32/nvidia-375/libEGL.so.375.39 /usr/lib32/nvidia-375/libEGL.so.1
 RUN ln -s /usr/lib/x86_64-linux-gnu/libcudnn.so.6 /usr/local/cuda/lib64/libcudnn.so.5
 
-# General APT-GET instalations
 RUN apt-get update && apt-get install -y --no-install-recommends \
   build-essential \
   cmake \
@@ -82,3 +81,26 @@ COPY ./benchmark/tensorflow /tensorflow
 COPY ./benchmark.sh /benchmark.sh
 
 WORKDIR /
+
+# Elixir installation
+RUN wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && dpkg -i erlang-solutions_1.0_all.deb
+RUN apt-get update && apt-get install -y esl-erlang
+RUN apt-get install -y elixir
+
+WORKDIR /
+
+COPY ./benchmark/sirin /sirin
+RUN cd /sirin/neuro && mix local.hex --force && cd /sirin/cuda && mix local.hex --force
+
+WORKDIR /sirin/cuda
+
+RUN mix clean
+RUN GPU_SPEED_DEBUG=1 mix compile
+
+WORKDIR /sirin/neuro
+
+RUN mix compile
+
+WORKDIR /
+
+CMD ["/benchmark.sh"]
